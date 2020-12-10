@@ -2,3 +2,6 @@ dist
 bazel-out
 node_modules
 target/
+*.hi
+*.o
+Main
