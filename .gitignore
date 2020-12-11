@@ -5,3 +5,9 @@ target/
 *.hi
 *.o
 Main
+_build/
+*.cmi
+*.cmo
+*.cmx
+*.out
+main
