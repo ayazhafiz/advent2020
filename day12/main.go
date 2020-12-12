@@ -23,22 +23,9 @@ type position struct {
 	y int
 }
 
-func rleft(p position, amt int) position {
-	for i := 0; i < amt; i += 1 {
-		nx := -p.y
-		ny := p.x
-		p.x = nx
-		p.y = ny
-	}
-	return p
-}
-
-func rright(p position, amt int) position {
-	for i := 0; i < amt; i += 1 {
-		nx := p.y
-		ny := -p.x
-		p.x = nx
-		p.y = ny
+func rotr(p position, by int) position {
+	for i := 0; i < by; i += 1 {
+		p.x, p.y = p.y, -p.x
 	}
 	return p
 }
@@ -57,9 +44,9 @@ func route1(cmds []cmd) position {
 		case 'W':
 			pos.x -= cmd.by
 		case 'L':
-			dir = rleft(dir, cmd.by/90)
+			dir = rotr(dir, 4-((cmd.by/90)%4))
 		case 'R':
-			dir = rright(dir, cmd.by/90)
+			dir = rotr(dir, ((cmd.by / 90) % 4))
 		case 'F':
 			pos.x += dir.x * cmd.by
 			pos.y += dir.y * cmd.by
@@ -82,9 +69,9 @@ func route2(cmds []cmd) position {
 		case 'W':
 			wp.x -= cmd.by
 		case 'L':
-			wp = rleft(wp, cmd.by/90)
+			wp = rotr(wp, 4-((cmd.by/90)%4))
 		case 'R':
-			wp = rright(wp, cmd.by/90)
+			wp = rotr(wp, ((cmd.by / 90) % 4))
 		case 'F':
 			pos.x += wp.x * cmd.by
 			pos.y += wp.y * cmd.by
