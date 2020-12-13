@@ -5,9 +5,10 @@ import qualified Data.Map                      as Map
 main = do
   input <- lines <$> readFile "input.txt"
   let (adapters, max_adapter) =
-        (let nums' = sort $ map read input :: [Int]
-         in  let max_adapter = maximum nums' + 3
-             in  (nums' ++ [max_adapter], max_adapter)
+        (let 
+            nums' = sort $ map read input :: [Int]
+            max_adapter = maximum nums' + 3
+         in  (nums' ++ [max_adapter], max_adapter)
         )
 
   print "Part 1:"
