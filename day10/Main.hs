@@ -5,9 +5,10 @@ import qualified Data.Map                      as Map
 main = do
   input <- lines <$> readFile "input.txt"
   let (adapters, max_adapter) =
-        (let nums' = sort $ map read input :: [Int]
-         in  let max_adapter = maximum nums' + 3
-             in  (nums' ++ [max_adapter], max_adapter)
+        (let 
+            nums' = sort $ map read input :: [Int]
+            max_adapter = maximum nums' + 3
+         in  (nums' ++ [max_adapter], max_adapter)
         )
 
   print "Part 1:"
@@ -24,17 +25,14 @@ main = do
   print "Part 2:"
   let known_adapters = Set.fromAscList adapters
   let
-    max_adapter_connect_ways =
+    maxAdapterConnectWays =
       (let
          connect_ways :: Map.Map Int Int -> Int -> Int
          connect_ways mp_connections adapter =
            if not (Set.member adapter known_adapters)
              then connect_ways mp_connections (adapter + 1)
              else
-               let adapter_connect_ways =
-                     Map.findWithDefault 0 (adapter - 3) mp_connections
-                       + Map.findWithDefault 0 (adapter - 2) mp_connections
-                       + Map.findWithDefault 0 (adapter - 1) mp_connections
+               let adapter_connect_ways = map (\n -> Map.findWithDefault 0 n mp_conntections) [adapter - 3 .. adapter -1]
                in
                  if adapter == max_adapter
                    then adapter_connect_ways
