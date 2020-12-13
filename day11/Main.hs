@@ -55,8 +55,8 @@ main = do
             occupiedAround seats r c =
               let surrounding =
                     [ (seats !! nr) !! nc
-                    | nr <- map (+ r) [-1 .. 1]
-                    , nc <- map (+ c) [-1 .. 1]
+                    | nr <- [r-1 .. r+1]
+                    , nc <- [r-1 .. r+1]
                     , (nr, nc) /= (r, c)
                     , inBounds seats nr nc
                     ]
