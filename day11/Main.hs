@@ -23,8 +23,7 @@ nOccupied Occupied = 1
 nOccupied _        = 0
 
 countOccupied :: [[Seat]] -> Int
-countOccupied seats =
-  let rowCounts = map (foldl (flip ((+) . nOccupied)) 0) seats in sum rowCounts
+countOccupied = sum . map (length . filter occupied)
 
 inBounds :: [[a]] -> Int -> Int -> Bool
 inBounds list row col =
