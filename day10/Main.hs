@@ -25,7 +25,7 @@ main = do
   print "Part 2:"
   let known_adapters = Set.fromAscList adapters
   let
-    max_adapter_connect_ways =
+    maxAdapterConnectWays =
       (let
          connect_ways :: Map.Map Int Int -> Int -> Int
          connect_ways mp_connections adapter =
