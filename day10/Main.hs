@@ -32,10 +32,7 @@ main = do
            if not (Set.member adapter known_adapters)
              then connect_ways mp_connections (adapter + 1)
              else
-               let adapter_connect_ways =
-                     Map.findWithDefault 0 (adapter - 3) mp_connections
-                       + Map.findWithDefault 0 (adapter - 2) mp_connections
-                       + Map.findWithDefault 0 (adapter - 1) mp_connections
+               let adapter_connect_ways = map (\n -> Map.findWithDefault 0 n mp_conntections) [adapter - 3 .. adapter -1]
                in
                  if adapter == max_adapter
                    then adapter_connect_ways
