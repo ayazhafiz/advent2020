@@ -18,9 +18,12 @@ parseSeat =
 parseSeatRow :: Parser [Seat]
 parseSeatRow = many parseSeat
 
+occupied :: Seat -> Bool
+occupied Occupied = True
+occupied _        = False
+
 nOccupied :: Seat -> Int
-nOccupied Occupied = 1
-nOccupied _        = 0
+nOccupied = fromEnum . occupied
 
 countOccupied :: [[Seat]] -> Int
 countOccupied = sum . map (length . filter occupied)
@@ -53,44 +56,44 @@ main = do
   let part1Occupied =
         let occupiedAround :: OccupiedAround
             occupiedAround seats r c =
-              let surrounding =
-                    [ (seats !! nr) !! nc
-                    | nr <- [r-1 .. r+1]
-                    , nc <- [r-1 .. r+1]
-                    , (nr, nc) /= (r, c)
-                    , inBounds seats nr nc
-                    ]
-              in  sum (map nOccupied surrounding)
-        in  let mapSeat :: MapSeat
-                mapSeat 0   Empty    = Occupied
-                mapSeat num Occupied = if num >= 4 then Empty else Occupied
-                mapSeat _   seat     = seat
-            in  let fixedPlane = fix (stepSeating occupiedAround mapSeat) plane
-                in  countOccupied fixedPlane
+                let surrounding =
+                        [ (seats !! nr) !! nc
+                        | nr <- [r - 1 .. r + 1]
+                        , nc <- [r - 1 .. r + 1]
+                        , (nr, nc) /= (r, c)
+                        , inBounds seats nr nc
+                        ]
+                in  sum (map nOccupied surrounding)
+            mapSeat :: MapSeat
+            mapSeat 0   Empty    = Occupied
+            mapSeat num Occupied = if num >= 4 then Empty else Occupied
+            mapSeat _   seat     = seat
+            fixedPlane = fix (stepSeating occupiedAround mapSeat) plane
+        in  countOccupied fixedPlane
   print part1Occupied
 
   print "Part 2:"
   let part2Occupied =
         let occupiedAround :: OccupiedAround
             occupiedAround seats r c =
-              let surrounding =
-                    [ map (\mul -> (r + mul * dr, c + mul * dc)) [1 ..]
-                    | dr <- [-1 .. 1]
-                    , dc <- [-1 .. 1]
-                    , (dr, dc) /= (0, 0)
-                    ]
-              in  let searchSeats :: [(Int, Int)] -> Int
-                      searchSeats ((r, c) : rest) = if not (inBounds seats r c)
-                        then 0
-                        else case (seats !! r) !! c of
-                          Empty    -> 0
-                          Occupied -> 1
-                          Floor    -> searchSeats rest
-                  in  sum (map searchSeats surrounding)
-        in  let mapSeat :: MapSeat
-                mapSeat 0   Empty    = Occupied
-                mapSeat num Occupied = if num >= 5 then Empty else Occupied
-                mapSeat _   seat     = seat
-            in  let fixedPlane = fix (stepSeating occupiedAround mapSeat) plane
-                in  countOccupied fixedPlane
+                let surrounding =
+                        [ map (\mul -> (r + mul * dr, c + mul * dc)) [1 ..]
+                        | dr <- [-1 .. 1]
+                        , dc <- [-1 .. 1]
+                        , (dr, dc) /= (0, 0)
+                        ]
+                in  let searchSeats :: [(Int, Int)] -> Int
+                        searchSeats ((r, c) : rest) = if not (inBounds seats r c)
+                          then 0
+                          else case (seats !! r) !! c of
+                            Empty    -> 0
+                            Occupied -> 1
+                            Floor    -> searchSeats rest
+                    in  sum (map searchSeats surrounding)
+            mapSeat :: MapSeat
+            mapSeat 0   Empty    = Occupied
+            mapSeat num Occupied = if num >= 5 then Empty else Occupied
+            mapSeat _   seat     = seat
+            fixedPlane = fix (stepSeating occupiedAround mapSeat) plane
+        in  countOccupied fixedPlane
   print part2Occupied

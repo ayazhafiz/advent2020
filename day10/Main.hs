@@ -5,9 +5,8 @@ import qualified Data.Map                      as Map
 main = do
   input <- lines <$> readFile "input.txt"
   let (adapters, max_adapter) =
-        (let 
-            nums' = sort $ map read input :: [Int]
-            max_adapter = maximum nums' + 3
+        (let nums'       = sort $ map read input :: [Int]
+             max_adapter = maximum nums' + 3
          in  (nums' ++ [max_adapter], max_adapter)
         )
 
@@ -27,21 +26,18 @@ main = do
   let
     maxAdapterConnectWays =
       (let
-         connect_ways :: Map.Map Int Int -> Int -> Int
-         connect_ways mp_connections adapter =
+         updateConnections :: Map.Map Int Int -> Int -> Map.Map Int Int
+         updateConnections mpConnections adapter =
            if not (Set.member adapter known_adapters)
-             then connect_ways mp_connections (adapter + 1)
+             then mpConnections
              else
-               let adapter_connect_ways = map (\n -> Map.findWithDefault 0 n mp_conntections) [adapter - 3 .. adapter -1]
-               in
-                 if adapter == max_adapter
-                   then adapter_connect_ways
-                   else
-                     let
-                       connections' =
-                         Map.insert adapter adapter_connect_ways mp_connections
-                     in  connect_ways connections' (adapter + 1)
+               let adapter_connect_ways = sum $ map
+                     (\n -> Map.findWithDefault 0 n mpConnections)
+                     [adapter - 3 .. adapter - 1]
+               in  Map.insert adapter adapter_connect_ways mpConnections
+         connectWays =
+           foldl updateConnections (Map.singleton 0 1) [1 .. max_adapter]
        in
-         connect_ways (Map.singleton 0 1) 1
+         Map.findWithDefault 0 max_adapter connectWays
       )
-  print max_adapter_connect_ways
+  print maxAdapterConnectWays
