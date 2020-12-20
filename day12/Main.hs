@@ -54,7 +54,7 @@ route2 cmds =
       step (p     , wp         ) (RotL  by) = (p, rotl by wp)
       step (p     , wp         ) (RotR  by) = (p, rotr by wp)
       step ((x, y), wp@(wx, wy)) (Fwd   by) = ((x + by * wx, y + by * wy), wp)
-  in  fst $ foldl step ((0, 0), (10, 1)) cmds
+  in  fst $ foldl' step ((0, 0), (10, 1)) cmds
 
 l1 :: Position -> Int
 l1 (x, y) = abs x + abs y
