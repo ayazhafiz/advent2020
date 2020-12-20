@@ -61,8 +61,7 @@ part2 buses =
   --   ...
   let an_s = catMaybes
         (zipWith (\bus wait -> fmap (\iv -> (iv - wait, iv)) bus) buses [0 ..])
-      as = map fst an_s
-      ns = map snd an_s
+      (as, ns) = unzip an_s
   in  chineseRemainder ns as
 
 main = do
