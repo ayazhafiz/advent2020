@@ -73,3 +73,4 @@ main = do
   print $ product cornerTIds
 
   putStrLn "Part 2:"
+  -- TODO: This doesn't interest me rn, do later
