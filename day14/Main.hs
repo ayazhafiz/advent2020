@@ -107,7 +107,7 @@ applyCommand2 (memory, mask) (Write addr value) =
 
 emulate :: MemoryState s => (s -> Command -> s) -> s -> [Command] -> Int
 emulate folder initState commands =
-  let result = foldl folder initState commands
+  let result = foldl' folder initState commands
   in  sum $ Map.elems $ memory result
 
 main = do
