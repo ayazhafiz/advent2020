@@ -1,4 +1,5 @@
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE ViewPatterns #-}
 
 import           Data.Bifunctor
 import           Data.List
@@ -45,12 +46,10 @@ solveConstraints constraints =
       sortConstr = sortOn (Set.size . snd)
       walk :: [(Allergen, Set Ingredient)] -> [(Allergen, Ingredient)]
       walk [] = []
-      walk ((allergen, constraints) : rest) =
-          let ingredient = case Set.toList constraints of
-                [ing] -> ing
-                _     -> error "Constraints not uniquely solvable!"
-              rest' = sortConstr $ map (second $ Set.delete ingredient) rest
+      walk ((allergen, Set.elems -> [ingredient]) : rest) =
+          let rest' = sortConstr $ map (second $ Set.delete ingredient) rest
           in  (allergen, ingredient) : walk rest'
+      walk _ = error "Constraints not uniquely solvable!"
   in  Map.fromList $ walk $ sortConstr constr
 
 ingredients :: [([Ingredient], [Allergen])] -> Set Ingredient
