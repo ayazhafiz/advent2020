@@ -1,0 +1,9 @@
+# Just for language service support
+
+[package]
+name = "day22"
+version = "0.0.0"
+
+[[bin]]
+name = "day22"
+path = "main.rs"
